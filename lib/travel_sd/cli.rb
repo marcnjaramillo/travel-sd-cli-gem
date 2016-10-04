@@ -2,19 +2,71 @@ class TravelSd::CLI
 
   def call
     puts "Plan your perfect San Diego getaway!"
+    puts "Here are the top 30 San Diego Attractions:"
+    puts ""
     destinations
+    cli_menu
   end
 
   def destinations
-  puts "Top 30 San Diego Attractions:"
-  #Pull destination types from the website and list them
-  @first_list = TravelSd::Destination.first
-  #Currently not producing expected result of eliminating duplicate data
-  @first_list.each do |destination|
-    puts "#{destination.name}"
+    puts "#1 - 10:"
+    puts "--------------------"
+    @first_list = TravelSd::Destination.first
+    @first_list.each do |destination|
+      puts "#{destination.name}"
+      puts "--------------------"
+    end
   end
-    puts "Enter the number of the destination you want more info on or enter next
-    to see more destinations"
-    puts "If you are finished, enter exit to leave the program."
+
+  def cli_menu
+    input = nil
+      puts "Enter the number of the destination you want more info for."
+      puts "Enter list two or list three to see more destinations."
+      puts "You may type exit to leave the program at any time."
+    while input != "exit"
+      input = gets.strip.downcase
+      if input.to_i == 1
+
+        puts "Enter list to return to the list of destination types."
+
+      elsif input == "list two"
+        puts ""
+        puts "#11 - 20:"
+        puts "--------------------"
+        @second_list = TravelSd::Destination.second
+        @second_list.each do |destination|
+          puts "#{destination.name}"
+          puts "--------------------"
+        end
+          puts "Enter the number of the destination you want more info for."
+          puts "Enter list three to see the final list of destinations."
+          puts "Enter top list to return to the first list, or type exit to leave the program."
+          puts ""
+
+      elsif input == "list three"
+        puts ""
+        puts "#21 - 30:"
+        puts "--------------------"
+        @third_list = TravelSd::Destination.third
+        @third_list.each do |destination|
+          puts "#{destination.name}"
+          puts "--------------------"
+        end
+          puts "Enter the number of the destination you want more info for."
+          puts "Enter top list to return to the first list, or second list to see the second list."
+          puts "Type exit to leave the program."
+          puts ""
+
+      elsif input == "top list"
+        destinations
+
+      elsif input == "exit"
+        puts ""
+        puts "Enjoy your sightseeing adventure in San Diego! Come again!"
+
+      else
+        puts "Invalid input. Available choices: destination number, top list, list two, list three, exit."
+      end
+    end
   end
 end
