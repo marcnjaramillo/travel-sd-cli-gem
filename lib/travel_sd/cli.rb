@@ -6,12 +6,15 @@ class TravelSd::CLI
   end
 
   def destinations
-  puts "Top San Diego Attractions:"
+  puts "Top 30 San Diego Attractions:"
   #Pull destination types from the website and list them
-  @destinations = TravelSd::Destination.current
+  @first_list = TravelSd::Destination.first
   #Currently not producing expected result of eliminating duplicate data
-  @destinations.each do |destination|
+  @first_list.each do |destination|
     puts "#{destination.name}"
   end
-end
+    puts "Enter the number of the destination you want more info on or enter next
+    to see more destinations"
+    puts "If you are finished, enter exit to leave the program."
+  end
 end
