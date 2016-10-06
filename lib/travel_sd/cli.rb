@@ -3,12 +3,24 @@ class TravelSd::CLI
   def call
     puts "Plan your perfect San Diego getaway!"
     puts "Here are the top 30 San Diego Attractions:"
-    puts ""
     destinations
     cli_menu
   end
 
+  def full_destination(destination)
+    puts ""
+    puts "-------------- #{destination.name} --------------"
+
+    puts ""
+    puts "Special Offer: #{destination.special}"
+    puts ""
+
+    #puts "Where: #{destination.place}"
+    #puts ""
+  end
+
   def destinations
+    puts ""
     puts "#1 - 10:"
     puts "--------------------"
     @first_list = TravelSd::Destination.first
@@ -25,9 +37,14 @@ class TravelSd::CLI
       puts "You may type exit to leave the program at any time."
     while input != "exit"
       input = gets.strip.downcase
-      if input.to_i == 1
-
-        puts "Enter list to return to the list of destination types."
+      if input == "top list"
+        destinations
+      elsif input.to_i > 0
+        if destination = TravelSd::Destination.find(input.to_i)
+          full_destination(destination)
+        end
+        puts "Enter top list, list two, or list three to return to the destination listings."
+        puts "If you are finished, type exit."
 
       elsif input == "list two"
         puts ""
@@ -56,9 +73,6 @@ class TravelSd::CLI
           puts "Enter top list to return to the first list, or second list to see the second list."
           puts "Type exit to leave the program."
           puts ""
-
-      elsif input == "top list"
-        destinations
 
       elsif input == "exit"
         puts ""
