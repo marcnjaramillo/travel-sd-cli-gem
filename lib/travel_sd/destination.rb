@@ -1,69 +1,30 @@
+require 'pry'
+
 class TravelSd::Destination
-  attr_accessor :name, :special
+  attr_accessor :name, :specials
 
-  def self.first
-    self.first_list
+  def initialize(name = nil)
+    @name = name
   end
 
-  def self.second
-    self.second_list
-  end
-
-  def self.third
-    self.third_list
+  def self.all
+    @@all ||= scrape_first
   end
 
   def self.find(id)
-    self.first[id-1]
+    self.all[id-1]
   end
 
-  def self.first_list
-    first_list = []
-    first_list << self.scrape_first
-    first_list
-  end
-
-  def self.second_list
-    second_list = []
-    second_list << self.scrape_second
-    second_list
-  end
-
-  def self.third_list
-    third_list = []
-    third_list << self.scrape_third
-    third_list
-  end
-
-  def self.scrape_first
+  def specials
     doc = Nokogiri::HTML(open("http://hotels.sandiego.org/attraction/list/246/m24?page=1"))
-    place = doc.search("h2[itemprop='name']")
-    deal = doc.search("div.aresDealTextInner p")
-
-    destination = self.new
-    destination.name = place.map(&:text).join("\n")
-    destination.special = deal.map(&:text).join("\n")
-    destination
+    @specials ||= doc.search("div.aresDealTextInner p").text.strip
   end
 
-  def self.scrape_second
-    doc = Nokogiri::HTML(open("http://hotels.sandiego.org/attraction/list/246/m24?page=2"))
-    place = doc.search("h2[itemprop='name']")
+  private
+    def self.scrape_first
+      doc = Nokogiri::HTML(open("http://hotels.sandiego.org/attraction/list/246/m24?page=1"))
+      places = doc.search("h2[itemprop='name']")
 
-    destination = self.new
-    destination.name = place.map(&:text).join("\n")
-
-    destination
-  end
-
-  def self.scrape_third
-    doc = Nokogiri::HTML(open("http://hotels.sandiego.org/attraction/list/246/m24?page=3"))
-    place = doc.search("h2[itemprop='name']")
-
-    destination = self.new
-    destination.name = place.map(&:text).join("\n")
-
-    destination
-  end
-
+      places.collect{|name| new(name.text.strip)}
+    end
 end

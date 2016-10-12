@@ -2,9 +2,18 @@ class TravelSd::CLI
 
   def call
     puts "Plan your perfect San Diego getaway!"
-    puts "Here are the top 30 San Diego Attractions:"
+    puts "Here are the top 10 San Diego Attractions:"
     destinations
     cli_menu
+  end
+
+  def destinations
+    puts ""
+    puts "--------------------"
+    @first_list = TravelSd::Destination.all.each do |destination|
+      puts "#{destination.name}"
+    end
+      puts "--------------------"
   end
 
   def full_destination(destination)
@@ -12,28 +21,14 @@ class TravelSd::CLI
     puts "-------------- #{destination.name} --------------"
 
     puts ""
-    puts "Special Offer: #{destination.special}"
+    puts "Special Offer: #{destination.specials}"
     puts ""
-
-    #puts "Where: #{destination.place}"
-    #puts ""
-  end
-
-  def destinations
-    puts ""
-    puts "#1 - 10:"
-    puts "--------------------"
-    @first_list = TravelSd::Destination.first
-    @first_list.each do |destination|
-      puts "#{destination.name}"
-      puts "--------------------"
-    end
+    binding.pry
   end
 
   def cli_menu
     input = nil
       puts "Enter the number of the destination you want more info for."
-      puts "Enter list two or list three to see more destinations."
       puts "You may type exit to leave the program at any time."
     while input != "exit"
       input = gets.strip.downcase
@@ -43,43 +38,15 @@ class TravelSd::CLI
         if destination = TravelSd::Destination.find(input.to_i)
           full_destination(destination)
         end
-        puts "Enter top list, list two, or list three to return to the destination listings."
+        puts "Enter the number of another destination, or top list to return to the destination listings."
         puts "If you are finished, type exit."
-
-      elsif input == "list two"
-        puts ""
-        puts "#11 - 20:"
-        puts "--------------------"
-        @second_list = TravelSd::Destination.second
-        @second_list.each do |destination|
-          puts "#{destination.name}"
-          puts "--------------------"
-        end
-          puts "Enter the number of the destination you want more info for."
-          puts "Enter list three to see the final list of destinations."
-          puts "Enter top list to return to the first list, or type exit to leave the program."
-          puts ""
-
-      elsif input == "list three"
-        puts ""
-        puts "#21 - 30:"
-        puts "--------------------"
-        @third_list = TravelSd::Destination.third
-        @third_list.each do |destination|
-          puts "#{destination.name}"
-          puts "--------------------"
-        end
-          puts "Enter the number of the destination you want more info for."
-          puts "Enter top list to return to the first list, or second list to see the second list."
-          puts "Type exit to leave the program."
-          puts ""
 
       elsif input == "exit"
         puts ""
         puts "Enjoy your sightseeing adventure in San Diego! Come again!"
 
       else
-        puts "Invalid input. Available choices: destination number, top list, list two, list three, exit."
+        puts "Invalid input. Available choices: destination number, top list or exit."
       end
     end
   end
