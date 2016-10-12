@@ -23,7 +23,6 @@ class TravelSd::CLI
     puts ""
     puts "Special Offer: #{destination.specials}"
     puts ""
-    binding.pry
   end
 
   def cli_menu
