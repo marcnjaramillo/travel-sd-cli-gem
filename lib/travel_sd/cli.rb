@@ -1,6 +1,7 @@
 class TravelSd::CLI
 
   def call
+    TravelSd::Scraper.new.all_attractions
     puts "Plan your perfect San Diego getaway!"
     puts "Here are the top 10 San Diego Attractions:"
     destinations
@@ -10,19 +11,27 @@ class TravelSd::CLI
   def destinations
     puts ""
     puts "--------------------"
-    @first_list = TravelSd::Destination.all.each do |destination|
-      puts "#{destination.name}"
+    TravelSd::Destination.all.each.with_index(1) do |destination, index|
+      puts "#{index}. #{destination.name}"
     end
       puts "--------------------"
   end
 
   def full_destination(destination)
     puts ""
-    puts "-------------- #{destination.name} --------------"
+    puts "------------"
+    puts "Destination"
+    puts "------------"
+    puts destination.name
 
     puts ""
-    puts "Special Offer: #{destination.specials}"
+    puts "------"
+    puts "About"
+    puts "------"
+    puts destination.bio
     puts ""
+    puts "___________________________________________________________________________________________"
+
   end
 
   def cli_menu
@@ -31,13 +40,14 @@ class TravelSd::CLI
       puts "You may type exit to leave the program at any time."
     while input != "exit"
       input = gets.strip.downcase
-      if input == "top list"
+      if input == "list"
         destinations
       elsif input.to_i > 0
         if destination = TravelSd::Destination.find(input.to_i)
           full_destination(destination)
         end
-        puts "Enter the number of another destination, or top list to return to the destination listings."
+        puts ""
+        puts "Enter the number of another destination, or list to return to the destination listings."
         puts "If you are finished, type exit."
 
       elsif input == "exit"
@@ -45,7 +55,7 @@ class TravelSd::CLI
         puts "Enjoy your sightseeing adventure in San Diego! Come again!"
 
       else
-        puts "Invalid input. Available choices: destination number, top list or exit."
+        puts "Invalid input. Available choices: destination number, list or exit."
       end
     end
   end
