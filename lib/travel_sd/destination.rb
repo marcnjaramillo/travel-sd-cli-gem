@@ -1,30 +1,28 @@
 require 'pry'
 
 class TravelSd::Destination
-  attr_accessor :name, :specials
+  attr_accessor :name, :bio
 
-  def initialize(name = nil)
+  @@all = []
+
+  def self.new_from_index_page(a)
+    self.new(
+      a.css("h2").text,
+      a.css("p.aresTextContent").text
+      )
+  end
+
+  def initialize(name=nil, bio=nil)
     @name = name
+    @bio = bio
+    @@all << self
   end
 
   def self.all
-    @@all ||= scrape_first
+    @@all
   end
 
   def self.find(id)
     self.all[id-1]
   end
-
-  def specials
-    doc = Nokogiri::HTML(open("http://hotels.sandiego.org/attraction/list/246/m24?page=1"))
-    @specials ||= doc.search("div.aresDealTextInner p").text.strip
-  end
-
-  private
-    def self.scrape_first
-      doc = Nokogiri::HTML(open("http://hotels.sandiego.org/attraction/list/246/m24?page=1"))
-      places = doc.search("h2[itemprop='name']")
-
-      places.collect{|name| new(name.text.strip)}
-    end
 end
