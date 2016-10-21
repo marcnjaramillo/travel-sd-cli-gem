@@ -5,16 +5,9 @@ class TravelSd::Destination
 
   @@all = []
 
-  def self.new_from_index_page(a)
-    self.new(
-      a.css("h2").text,
-      a.css("p.aresTextContent").text
-      )
-  end
-
-  def initialize(name=nil, bio=nil)
-    @name = name
-    @bio = bio
+  def initialize(attributes = {})
+    @name = attributes[:name]
+    @bio = attributes[:bio]
     @@all << self
   end
 

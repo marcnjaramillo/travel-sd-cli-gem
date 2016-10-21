@@ -1,7 +1,7 @@
 class TravelSd::CLI
 
   def call
-    TravelSd::Scraper.new.all_attractions
+    TravelSd::Scraper.scrape_attractions
     puts "Plan your perfect San Diego getaway!"
     puts "Here are the top 10 San Diego Attractions:"
     destinations
